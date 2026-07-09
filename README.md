@@ -5,6 +5,9 @@
 /plugin install brain@skandragon
 ```
 
+Then enable auto-update: `/plugin` → Manage marketplaces → skandragon → **Enable auto-update**,
+so you pick up new plugins and fixes without re-adding the marketplace.
+
 ## brain
 
 A durable, cross-project knowledge base for Claude: an [OKF](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
