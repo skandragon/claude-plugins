@@ -1,0 +1,14 @@
+{
+  "name": "skandragon",
+  "owner": {
+    "name": "Michael Graff",
+    "url": "https://github.com/skandragon"
+  },
+  "plugins": [
+    {
+      "name": "brain",
+      "source": "./plugins/brain",
+      "description": "A durable, cross-project knowledge base for Claude: an OKF markdown wiki you read, write, and search across machines."
+    }
+  ]
+}

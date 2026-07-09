@@ -1,0 +1,12 @@
+{
+  "name": "brain",
+  "description": "A durable, cross-project knowledge base for Claude: an OKF markdown wiki you read, write, and search across machines.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Michael Graff",
+    "url": "https://github.com/skandragon"
+  },
+  "homepage": "https://github.com/skandragon/claude-plugins",
+  "license": "MIT",
+  "keywords": ["memory", "knowledge-base", "okf", "obsidian", "wiki"]
+}
