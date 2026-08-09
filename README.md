@@ -30,6 +30,11 @@ the brain follows you across machines. Ask Claude to "set up my brain" to bootst
   frontmatter, per-directory `index.md`, searcher-oriented descriptions, derived backlinks.
 - A SessionStart hook that injects every directory `index.md` into context, so Claude knows
   what it knows without reading a single concept file (OKF progressive disclosure).
+- A PreToolUse hook that stops memories landing in the wrong place: Claude Code injects its
+  own "Memory" instructions pointing at `~/.claude/projects/*/memory/`, which is concrete and
+  path-specific enough to win on reflex even when you've said otherwise. The hook blocks
+  writes there and redirects searches of it to `search.py`. Reads are left alone — genuine
+  single-session scratch is fine.
 - `search.py` (field-weighted ranked search, stdlib only), `backlinks.py` (derived, run
   before renames), `check-links.py` (dangling-link check). All default to `$CLAUDE_BRAIN_DIR`
   and take an explicit root for other wikis.
