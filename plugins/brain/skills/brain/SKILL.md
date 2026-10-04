@@ -8,17 +8,18 @@ description: Read/write the brain — a durable cross-project knowledge base kep
 The brain is a markdown wiki that survives sessions, projects, and machines. It lives at:
 
 ```
-$CLAUDE_BRAIN_DIR   (default: $HOME/brain)
+$CODEX_BRAIN_DIR or $CLAUDE_BRAIN_DIR
 ```
 
-Always resolve it from the environment variable — never hardcode a path, the user may keep
-it in a synced folder (Obsidian vault, Dropbox, a git repo).
+Resolve it with `brain_root.py` next to this skill. It checks those environment variables,
+then the `CLAUDE_BRAIN_DIR` value in `~/.claude/settings.json`, then `$HOME/brain`. Never
+hardcode a path; the user may keep the brain in a synced folder.
 
 It is an [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
 bundle, and also a valid Obsidian vault. **Every directory has its own `index.md`** (OKF
 progressive disclosure): the root index maps areas, each directory's index lists its
-concepts one line each. This plugin's SessionStart hook injects all indexes into every
-session — you have already seen them. Read individual concept files on demand.
+concepts one line each. This plugin's SessionStart hook injects all indexes into new
+Claude Code and Codex sessions. Read individual concept files on demand.
 
 The hook also prints the absolute path of this skill's scripts. If it didn't run, the
 scripts sit next to this `SKILL.md`.
@@ -28,7 +29,7 @@ scripts sit next to this `SKILL.md`.
 The root index defines the areas. A conventional starting set:
 
 - `people/` — who the user is: accounts, ownership, working preferences (type: person)
-- `practices/` — how Claude should work: rules, preferences, corrections (type: practice)
+- `practices/` — how the assistant should work: rules, preferences, corrections (type: practice)
 - `infrastructure/` — servers, registries, DBs, creds, runbooks (types: service, credential, database, runbook)
 - `projects/<name>/` — durable project-scoped knowledge (types: project, config, decision, …)
 - `index.md` — OKF reserved filename (at any level); never give it frontmatter. (`log.md` is
@@ -80,13 +81,13 @@ Updating: prefer editing the existing concept over creating a near-duplicate; bu
 Durable, cross-project or cross-machine facts: infra endpoints and credentials, working
 preferences and corrections (with the why), project decisions worth surviving a session.
 
-NOT: things the repo already records (code structure, git history, CLAUDE.md), transient
-session state, or purely local scratch. Project-scoped working memory can stay in the
-built-in `~/.claude/projects/*/memory/`; promote it to the brain when it proves durable.
+NOT: things the repo already records (code structure, git history, AGENTS.md or CLAUDE.md),
+transient session state, or purely local scratch. Project-scoped working memory can stay in
+the assistant's scratch space; promote it to the brain when it proves durable.
 
 ## Bootstrapping a new brain
 
-If `$CLAUDE_BRAIN_DIR/index.md` doesn't exist, ask the user before creating one. Then make
+If the resolved brain's `index.md` doesn't exist, ask the user before creating one. Then make
 the root `index.md` (no frontmatter) listing the areas above, and create each area
 directory with its own `index.md` as concepts arrive — don't pre-create empty ones.
 
@@ -116,7 +117,7 @@ secrets into it.
 - **After renames/deletes/batch edits:** run the link check (below) — invariants that
   aren't testable are aspirational.
 
-All scripts default to `$CLAUDE_BRAIN_DIR` and take an explicit root for other wikis.
+All scripts use the same brain resolution and take an explicit root for other wikis.
 
 ## Link check
 
@@ -132,8 +133,8 @@ with a non-empty `type`):
 
 ```bash
 python3 - <<'EOF'
-import pathlib, re, os, sys
-root = pathlib.Path(os.environ.get("CLAUDE_BRAIN_DIR", os.path.expanduser("~/brain")))
+import pathlib, re, subprocess, sys
+root = pathlib.Path(subprocess.check_output(["python3", "<skill-dir>/brain_root.py"], text=True).strip())
 bad = []
 for p in root.rglob("*.md"):
     if ".obsidian" in p.parts or p.name in ("index.md", "log.md", "policy.md"):

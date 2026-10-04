@@ -3,8 +3,8 @@
 # Silent no-op when no brain exists yet.
 set -u
 
-BRAIN="${CLAUDE_BRAIN_DIR:-$HOME/brain}"
-SKILL_DIR="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}/skills/brain"
+SKILL_DIR="${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}}/skills/brain"
+BRAIN="$(python3 "$SKILL_DIR/brain_root.py")"
 
 [ -f "$BRAIN/index.md" ] || exit 0
 

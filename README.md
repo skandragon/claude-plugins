@@ -1,4 +1,22 @@
-# skandragon's Claude Code plugins
+# skandragon's Claude Code and Codex plugins
+
+## Codex (user-wide)
+
+```sh
+codex plugin marketplace add skandragon/claude-plugins
+codex plugin add brain@skandragon
+```
+
+The marketplace tracks the GitHub repository. Refresh it with
+`codex plugin marketplace upgrade skandragon` to pick up later commits. Start a new
+Codex session after installation or refresh. Codex may ask you to trust the plugin's
+SessionStart hook before it can load brain indexes.
+
+To share an existing Claude Code brain, Codex uses `CODEX_BRAIN_DIR` or
+`CLAUDE_BRAIN_DIR` if set. Otherwise, it reads `CLAUDE_BRAIN_DIR` from
+`~/.claude/settings.json`, falling back to `~/brain`.
+
+## Claude Code
 
 ```
 /plugin marketplace add skandragon/claude-plugins

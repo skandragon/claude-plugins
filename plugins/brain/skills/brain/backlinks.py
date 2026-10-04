@@ -6,13 +6,13 @@ Matches markdown links whose target filename stem matches, and [[wiki-links]].
 Root defaults to $CLAUDE_BRAIN_DIR, else ~/brain. Backlinks are always derived,
 never stored — a maintained list rots; this is one scan and always correct.
 """
-import os, re, pathlib, sys
+import re, pathlib, sys
+from brain_root import brain_root
 
 if len(sys.argv) < 2:
     sys.exit(__doc__)
 stem = pathlib.Path(sys.argv[1]).stem
-root = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else \
-    pathlib.Path(os.environ.get("CLAUDE_BRAIN_DIR", os.path.expanduser("~/brain")))
+root = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else brain_root()
 
 pat = re.compile(r"\]\(([^)\s#]*/)?%s\.md(#[^)]*)?\)|\[\[%s([|#][^\]]*)?\]\]" % (re.escape(stem), re.escape(stem)))
 hits = 0

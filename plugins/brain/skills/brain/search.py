@@ -8,10 +8,11 @@ Field-weighted lexical ranking, stdlib only: tags/title matches outrank
 description/filename, which outrank body mentions; rarer terms weigh more (idf).
 # ponytail: full scan per query, fine to ~5k notes; add a cached index if it ever drags.
 """
-import os, re, math, pathlib, argparse
+import re, math, pathlib, argparse
+from brain_root import brain_root
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--root", default=os.environ.get("CLAUDE_BRAIN_DIR", os.path.expanduser("~/brain")))
+ap.add_argument("--root", default=str(brain_root()))
 ap.add_argument("-n", type=int, default=10)
 ap.add_argument("terms", nargs="+")
 args = ap.parse_args()
