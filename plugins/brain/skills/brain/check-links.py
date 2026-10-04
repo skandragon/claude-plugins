@@ -7,10 +7,10 @@ Markdown links are resolved relative to the containing file. Wiki links resolve
 Obsidian-style: by filename stem anywhere in the vault. External (scheme://) and
 anchor-only links are ignored. Exit 1 if any dangling links are found.
 """
-import os, re, pathlib, sys, urllib.parse
+import re, pathlib, sys, urllib.parse
+from brain_root import brain_root
 
-ROOT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else \
-    pathlib.Path(os.environ.get("CLAUDE_BRAIN_DIR", os.path.expanduser("~/brain")))
+ROOT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else brain_root()
 
 md_files = [p for p in ROOT.rglob("*.md") if ".obsidian" not in p.parts]
 stems = {p.stem for p in md_files}

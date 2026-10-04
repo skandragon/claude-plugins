@@ -1,4 +1,22 @@
-# skandragon's Claude Code plugins
+# skandragon's Claude Code and Codex plugins
+
+## Codex (user-wide)
+
+```sh
+codex plugin marketplace add skandragon/claude-plugins
+codex plugin add brain@skandragon
+```
+
+The marketplace tracks the GitHub repository. Refresh it with
+`codex plugin marketplace upgrade skandragon` to pick up later commits. Start a new
+Codex session after installation or refresh. Codex may ask you to trust the plugin's
+SessionStart hook before it can load brain indexes.
+
+To share an existing Claude Code brain, Codex uses `CODEX_BRAIN_DIR` or
+`CLAUDE_BRAIN_DIR` if set. Otherwise, it reads `CLAUDE_BRAIN_DIR` from
+`~/.claude/settings.json`, falling back to `~/brain`.
+
+## Claude Code
 
 ```
 /plugin marketplace add skandragon/claude-plugins
@@ -30,7 +48,7 @@ the brain follows you across machines. Ask Claude to "set up my brain" to bootst
   frontmatter, per-directory `index.md`, searcher-oriented descriptions, derived backlinks.
 - A SessionStart hook that injects every directory `index.md` into context, so Claude knows
   what it knows without reading a single concept file (OKF progressive disclosure).
-- A PreToolUse hook that stops memories landing in the wrong place: Claude Code injects its
+- A Claude Code PreToolUse hook that stops memories landing in the wrong place: Claude Code injects its
   own "Memory" instructions pointing at `~/.claude/projects/*/memory/`, which is concrete and
   path-specific enough to win on reflex even when you've said otherwise. The hook blocks
   writes there and redirects searches of it to `search.py`. Reads are left alone — genuine
